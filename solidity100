@@ -117,7 +117,7 @@ contract Q7{
             numbers.push(i);
         }
     }
-    //uint sum을 설정하지 않고 하는 방법은 뭘까?
+    //uint sum을 설정하지 않고 하는 방법은 뭘까? -모르겠다
      function sumArray() public view returns(uint){
         uint sum;
         for(uint i = 0; i<numbers.length; i++){
