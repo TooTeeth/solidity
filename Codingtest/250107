@@ -1,0 +1,36 @@
+// SPDX-License-Identifier: GPL-3.0
+
+pragma solidity >=0.8.2 <0.9.0;
+
+
+/*로또 프로그램을 만드려고 합니다. 
+숫자와 문자는 각각 4개 2개를 뽑습니다. 6개가 맞으면 1이더, 5개의 맞으면 0.75이더, 
+4개가 맞으면 0.25이더, 3개가 맞으면 0.1이더 2개 이하는 상금이 없습니다. (순서는 상관없음)
+
+참가 금액은 0.05이더입니다.
+
+당첨번호 : 7,3,2,5,B,C
+예시 1  : 8,2,4,7,D,A -> 맞은 번호 : 2     (1개)
+예시 2  : 9,1,4,2,F,B -> 맞은 번호 : 2,B   (2개)
+예시 3  : 2,3,4,6,A,B -> 맞은 번호 : 2,3,B (3개)*/
+
+contract  Q0107{
+    address payable owner;
+    uint[] lotto;
+
+
+    function buyLotto(address payable _owner) public {
+        require(msg.value == 0.05ether, "more money");
+        _owner.transfer(0.05ether);
+    }
+
+
+    function lottos(uint[] memory) public {
+        for(uint i = 0; i < 6; i++){
+            uint number = uint(Math.random()45*+1);
+            if(lotto.index0f(number) == -1){
+                lotto.push(num);
+            }
+        }
+    }
+}
