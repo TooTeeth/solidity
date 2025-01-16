@@ -1,0 +1,13 @@
+web3.js만 활용해야 합니다.
+
+defi들의 liquidity pool을 이용하여 eth의 가격을 계산해보세요. Pool은 최소한 3개 사용하고 그 평균값을 최종값으로 계산하세요. 체인은 메인넷으로 설정하세요. 
+
+코드를 실행했을 때 최종결과로 가격이 나오면 됩니다. 
+
+참고용 Defi list
+- uniswap
+- sushiswap
+- pancakeswap
+- kyberswap
+- balancer
+- bancor
