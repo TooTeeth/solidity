@@ -1,0 +1,19 @@
+node
+var {ethers} = require('ethers') //ethers 사용 선언
+var provider = new ethers.InfuraProvider('homestead') //이더리움 메인넷 검색
+await provider.getBlockNumber() //연결되었는지 확인 - 블록 받아오기
+var pvk = '개인키'
+c_addr = '0xB6a37b5d14D502c3Ab0Ae6f3a0E058BC9517786e'
+
+/*0xED5AF388653567Af2F388E6224dC7C4b3241C544
+0xBd3531dA5CF5857e7CfAA92426877b022e612cf8
+0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D
+0xB6a37b5d14D502c3Ab0Ae6f3a0E058BC9517786e
+0x5Af0D9827E0c53E4799BB226655A1de152A425a5*/ // NFT 주소 4개 중 1개 선택
+
+var signer = new ethers.Wallet(pvk, provider) //지갑 등록
+signer // 확인하기
+
+var abi = [ "event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)" ]; // 거래 확인 함수
+var contract = new ethers.Contract(c_addr, abi, signer)
+contract.on('Transfer',(event) => {console.log(event);}) //불러오기
