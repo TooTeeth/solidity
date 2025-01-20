@@ -1,3 +1,5 @@
+#NFT가 거래될 때마다 알림 받기 - ethers
+
 node
 var {ethers} = require('ethers') //ethers 사용 선언
 var provider = new ethers.InfuraProvider('homestead') //이더리움 메인넷 검색
