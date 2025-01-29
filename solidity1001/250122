@@ -1,0 +1,214 @@
+// SPDX-License-Identifier: GPL-3.0
+
+pragma solidity >=0.8.2 <0.9.0;
+
+/*Contract에 예치, 인출할 수 있는 기능을 구현하세요. 지갑 주소를 입력했을 때 현재 예치액을 반환받는 기능도 구현하세요.*/
+contract Q81{
+    function deposit() public payable{
+    }
+    function withdraw(address payable _wallet) public payable{
+        _wallet.transfer(msg.value);
+    }
+    function getBalance(address _wallet) public view returns(uint){
+        return _wallet.balance;
+    }
+}
+
+/*특정 숫자를 입력했을 때 그 숫자까지의 3,5,8의 배수의 개수를 알려주는 함수를 구현하세요.*/
+
+contract Q82 {
+    function MMM(uint index) public pure returns (uint, uint, uint) {
+        if(index % 3 == 0 || index % 5 == 0 || index % 8 == 0){
+            return(index / 3, index / 5, index / 8);
+        }return(0, 0, 0);
+  
+}
+}
+
+/*이름, 번호, 지갑주소 그리고 숫자와 문자를 연결하는 mapping을 가진 구조체 사람을 구현하세요. 사람이 들어가는 array를 구현하고 array안에 push 하는 함수를 구현하세요.*/
+contract Q83{
+    struct person{
+        string name;
+        uint number;
+        address owner;
+        mapping(uint => string) con;
+    }
+    person[] persons;
+    
+    function PUSH(string memory _name, uint _number, address _owner) public{
+       person storage newPerson = persons.push();
+
+       newPerson.name = _name;
+       newPerson.number = _number;
+       newPerson.owner = _owner;
+    }
+
+    function getPerson(uint index) public view returns(string memory, uint, address){
+        require(index <= persons.length, "person not found");
+        person storage p = persons[index];
+        return(p.name, p.number, p.owner);
+    }
+}//gpt 사용 - mapping이 구조체 안에 들어가 있으면 새로운 배열을 만들어서 추가해줘야 한다.
+
+
+/*2개의 숫자를 더하고, 빼고, 곱하는 함수들을 구현하세요. 단, 이 모든 함수들은 blacklist에 든 지갑은 실행할 수 없게 제한을 걸어주세요.*/
+contract Q84{
+    struct blacklist{
+        address _wallet;
+    }
+
+    blacklist[] Blacklist;
+
+    function isBlacklisted(address wallet) public view returns(bool){
+        for(uint i = 0; i < Blacklist.length; i++){
+            if(Blacklist[i]._wallet == wallet){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function ADD(uint _a, uint _b, address wallet) public view  returns(uint){
+        require(!isBlacklisted(wallet), "Invalid Value");
+        return _a + _b;
+    }
+
+    function SUB(uint _a, uint _b, address wallet) public view returns(uint){
+        require(!isBlacklisted(wallet));
+        return _a - _b;
+    }
+
+    function MUL(uint _a, uint _b, address wallet) public view returns (uint){
+        require(!isBlacklisted(wallet));
+        return _a * _b;
+    }
+
+    function PUSH(address wallet) public{
+        Blacklist.push(blacklist(wallet));
+    }
+}//gpt사용. 확인할때는 함수를 불러오는 걸 잊지말자
+
+
+/*숫자 변수 2개를 구현하세요. 한개는 찬성표 나머지 하나는 반대표의 숫자를 나타내는 변수입니다. 찬성, 반대 투표는 배포된 후 20개 블록동안만 진행할 수 있게 해주세요.*/
+contract Q85{
+    uint agreevotes = 0;
+    uint disagreevotes = 0;
+    uint startblock;
+    uint endblock;
+
+    constructor() {
+        startblock = block.number;
+        endblock = startblock + 20;
+    }
+
+    function VoteAgree() public {
+        require(block.number <= endblock, "Timeout");
+        agreevotes += 1;
+    }
+
+    function voteDis() public {
+        require(block.number <= endblock, "Timeout");
+        disagreevotes += 1;
+    }
+    
+    function getvotes() public view returns(uint, uint){  
+        return(agreevotes, disagreevotes);
+    }
+
+    function endvotes() public view returns(bool){
+        return block.number > endblock;
+    }
+}
+//gpt사용
+
+/* 숫자 변수 2개를 구현하세요. 한개는 찬성표 나머지 하나는 반대표의 숫자를 나타내는 변수입니다. 찬성, 반대 투표는 1이더 이상 deposit한 사람만 할 수 있게 제한을 걸어주세요.*/
+contract Q86{
+    uint agree = 0;
+    uint dis = 0;
+    mapping(address => uint) balances;
+
+    function Send() public payable{
+        require(msg.value > 0);
+        balances[msg.sender] += msg.value;
+    }
+
+    function isSend(address wallet) public view returns(bool){
+        if(balances[wallet] >= 1 ether){
+            return true;
+        }
+        return false;
+    }
+
+    function VoteAgree() public{
+     require(isSend(msg.sender));
+     agree += 1;   
+    }
+
+    function VotrDis() public {
+        require(isSend(msg.sender));
+        dis += 1;
+    }
+
+    function getvote() public view returns(uint, uint){
+        return(agree, dis);
+    }
+    
+}
+
+
+/*visibility에 신경써서 구현하세요. 
+    숫자 변수 a를 선언하세요. 해당 변수는 컨트랙트 외부에서는 볼 수 없게 구현하세요. 변화시키는 것도 오직 내부에서만 할 수 있게 해주세요.*/
+contract Q87{
+    uint private a;
+    
+    function setA(uint _a) internal {
+        a = _a;
+    }
+}
+
+/*아래의 코드를 보고 owner를 변경시키는 방법을 생각하여 구현하세요.*/
+contract OWNER {
+	address private owner;
+
+	constructor() {
+		owner = msg.sender;
+	}
+
+    function setInternal(address _a) internal {
+        owner = _a;
+    }
+
+    function getOwner() public view returns(address) {
+        return owner;
+    }
+}
+
+contract Q88 is OWNER{
+    function change(address  newowner) public {
+        setInternal(newowner);
+    }
+    
+}
+
+/*이름과 자기 소개를 담은 고객이라는 구조체를 만드세요. 이름은 5자에서 10자이내 자기 소개는 20자에서 50자 이내로 설정하세요.
+ (띄어쓰기 포함 여부는 신경쓰지 않아도 됩니다. 더 쉬운 쪽으로 구현하세요.)*/
+contract Q89{
+    struct customer{
+        string name;
+        string PR;
+    }
+    customer[] customers;
+
+    function setCustomer(string memory _name, string memory _PR) public{
+        require(bytes(_name).length <= 10 && bytes(_name).length >= 5 && bytes(_PR).length >= 20 && bytes(_PR).length <= 50);
+        customers.push(customer(_name, _PR));
+    }
+}
+
+
+/*당신 지갑의 이름을 알려주세요. 아스키 코드를 이용하여 byte를 string으로 바꿔주세요.*/
+contract Q90{
+    function getA(address wallet) public view returns(string memory){
+        return bytes(abi.encodePacked(wallet));
+    }
+}//모르겠담ㄴㅇㅁㄴㅇㅁㄴㄹ ㄴㄹ호ㅠㅈ
