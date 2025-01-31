@@ -325,6 +325,10 @@ contract Q18{
         A = _m;
     }
 
+    function add3(string memory _name, uint _birthday) public{
+        infor[_name] = _birthday;
+    }
+
     function Infor(string memory _name) public view returns(uint){
         return infor[_name];
     }
