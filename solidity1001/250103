@@ -171,3 +171,222 @@ contract Q20{
 }
 
 
+----복습-----
+// SPDX-License-Identifier: GPL-3.0
+
+pragma solidity >=0.8.2 <0.9.0;
+
+
+/*uint 형이 들어가는 array를 선언하고, 짝수만 들어갈 수 있게 걸러주는 함수를 구현하세요.*/
+contract Q11{
+    uint[] numbers;
+    function onlyEven(uint index) public{
+        for(uint i = 2; i < index; i+=2){
+            numbers.push(i);
+        }
+    }
+    function getEven() public view returns(uint[] memory){
+        return numbers;
+    }
+}
+
+/*숫자 3개를 더해주는 함수, 곱해주는 함수 그리고 순서에 따라서 a*b+c를 반환해주는 함수 3개를 각각 구현하세요*/
+contract Q12{
+    function ADD(uint _a, uint _b, uint _c) public pure returns(uint){
+       if(_a > _b && _b > _c){
+        return _a * _b + _c;
+       }else if(_b > _a && _a > _c){
+        return _b * _a + _c;
+       }else if(_c > _b && _b > _a){
+        return _c * _b + _a;
+       }else{
+        return _c * _a + _b;
+       }
+    }
+}
+
+contract Q12_1{
+    function add(uint _a, uint _b, uint _c) public pure returns(uint){
+        uint[3] memory numbers = [_a, _b, _c];
+        for(uint i = 0; i < 1; i++){
+            for(uint j = i + 1; j < 2; j++){
+                for(uint k = j + 1; k < 3; k++){
+                if(numbers[i] > numbers[j] && numbers[j] > numbers[k]){
+                   
+                   numbers = [numbers[i], numbers[j], numbers[0]];
+                } 
+                }
+            }
+        }
+        return numbers[0] * numbers[1] + numbers[2];
+    }
+}//이거 꼭 물어보자
+
+/*3의 배수라면 “A”를, 나머지가 1이 있다면 “B”를, 나머지가 2가 있다면 “C”를 반환하는 함수를 구현하세요.*/
+contract Q13{
+    function uintToString(uint index) public pure returns(string memory){
+        if(index % 3 == 0){
+            return "A";
+        }else if(index % 3 == 1){
+            return "B";
+        }else if(index % 3 == 2){
+            return "C";
+        }else{
+            return "Invalid value";
+        }
+    }
+
+    function uintToString2(uint index) public pure returns(string memory){
+        return(index % 3 ==0) ? "A" :
+              (index % 3 ==1) ? "B" :
+              (index % 3 ==2) ? "C" : "";
+
+    }
+}
+
+/*학번, 이름, 듣는 수험 목록을 포함한 학생 구조체를 선언하고 학생들을 관리할 수 있는 array를 구현하세요.
+ array에 학생을 넣는 함수도 구현하는데 학생들의 학번은 1번부터 순서대로 2,3,4,5 자동 순차적으로 증가하는 기능도 같이 구현하세요.*/
+contract Q14{
+    struct student{
+        uint number;
+        string name;
+        string list;
+    }
+
+    student[] students;
+    uint next= 1;
+
+    function addStudent(string memory _name, string memory _list) public{
+            students.push(student(next, _name, _list));
+            next++;   
+    }//gpt사용했음 까먹지 말자. 
+
+    function getStudent() public view returns(student[] memory){
+        return students;
+    }
+}
+
+/*배열 A를 선언하고 해당 배열에 0부터 n까지 자동으로 넣는 함수를 구현하세요. */
+contract Q15{
+    uint[] A;
+   
+    function add(uint index) public {
+        for(uint i =0; i <= index; i++){
+            A.push(i);
+        }
+    }
+    function getA() public view returns(uint[] memory){
+        return A;
+    }
+}
+
+/*숫자들만 들어갈 수 있는 array를 선언하고 해당 array에 숫자를 넣는 함수도 구현하세요. 또 array안의 모든 숫자의 합을 더하는 함수를 구현하세요.*/
+contract Q16{
+    uint[] numbers;
+    function add(uint index) public{
+        numbers.push(index);
+    }
+    function SUM() public view returns(uint){
+        uint sum = 0;
+        for(uint i = 0; i < numbers.length; i++){
+            sum += numbers[i];
+        }
+        return sum;
+    }
+}
+
+/*string을 input으로 받는 함수를 구현하세요. 이 함수는 true 혹은 false를 반환하는데 Bob이라는 이름이 들어왔을 때에만 true를 반환합니다. */
+contract Q17{
+    function stringToBool(string memory _m) public pure returns(bool){
+        if(keccak256(abi.encodePacked(_m)) == keccak256(abi.encodePacked("Bob"))){
+            return true;
+        }else{
+            return false;
+        }
+    }
+}
+
+/*이름을 검색하면 생일이 나올 수 있는 자료구조를 구현하세요. (매핑) 해당 자료구조에 정보를 넣는 함수, 정보를 볼 수 있는 함수도 구현하세요.*/
+contract Q18{
+    struct information{
+        string name;
+        uint  birthday;
+    }
+    
+    information A;
+
+    mapping(string => uint) infor;
+
+    function add(string memory _name, uint _birthday) public{
+        A = information(_name, _birthday);
+    }
+
+    function add2(information memory _m) public {
+        A = _m;
+    }
+
+    function Infor(string memory _name) public view returns(uint){
+        return infor[_name];
+    }
+}
+
+/*숫자를 넣으면 2배를 반환해주는 함수를 구현하세요. 단 숫자는 1000이상 넘으면 함수를 실행시키지 못하게 합니다.*/
+contract Q19{
+    function double(uint index) public pure returns(uint){
+        require(index * 2 < 1000);
+        return index * 2;
+    }
+
+    function double2(uint index) public pure returns(uint){
+        if(index * 2 < 1000){
+            return index *2;
+        }
+        return 0;
+    }
+}
+
+/*숫자만 들어가는 배열을 선언하고 숫자를 넣는 함수를 구현하세요. 15개의 숫자가 들어가면 3의 배수 위치에 있는 숫자들을 초기화 시키는(3번째, 6번째, 9번째 등등) 함수를 구현하세요.
+ (for 문 응용 → 약간 까다로움)*/
+ contract Q20{
+    uint[] numbers;
+    
+    function PUSH(uint index) public{
+        numbers.push(index);
+
+        if(numbers.length == 15){
+            Three();
+        }
+      
+    }
+    function Three() internal {
+        for(uint i = 2; i <numbers.length; i +=3){
+            numbers[i] = 0;
+        }
+    }
+
+    function getNumbers() public view returns(uint[] memory){
+        return numbers;
+    }
+ }//이건 gpt사용
+
+  contract Q20_1{
+    uint[] numbers;
+    
+    function PUSH(uint index) public{
+        numbers.push(index);
+
+       
+    }
+    function Three() public {
+        for(uint i = 2; i <numbers.length; i +=3){
+            if(numbers.length == 15){
+            delete numbers[i];
+            }
+        }
+    }
+
+    function getNumbers() public view returns(uint[] memory){
+        return numbers;
+    }
+ }
+
